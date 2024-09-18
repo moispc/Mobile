@@ -23,6 +23,8 @@ Toda la documentacion se encuentra en nuestra Wiki: [WIKI](https://shre.ink/Wiki
 
 🚀 Demo del año 2023: https://moispc.github.io/fullstack2023/
 
+🚀 Link al prototipo de Figma: <a href="https://www.figma.com/proto/WrbWkPSvLvUgsr9VDRCSAf/proyecto-ISPC?page-id=0%3A1&node-id=467-564&node-type=frame&viewport=773%2C-946%2C0.24&t=VYV2FknRzmrYrS8B-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=445%3A1316" target="_blank">Link Prototipo</a>
+
 ## El equipo
 
 
