@@ -12,22 +12,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 
-public class CartFragment extends Fragment {
+public class SuccessFragment extends Fragment {
 
 
-    public CartFragment() {
+    public SuccessFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        Button button = view.findViewById(R.id.btnPagar);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_success, container, false);
+        Button button = view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new DatosEntregaFragment());  // Replace with another fragment
+                replaceFragment(new HomeFragment());  // Replace with another fragment
             }
         });
 

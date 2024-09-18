@@ -19,15 +19,11 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        // Find the button in the fragment layout
         Button button = view.findViewById(R.id.btnLogin);
-
         TextView registerLink = view.findViewById(R.id.tvRegister);
 
-        // Set an OnClickListener to handle the button click
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,16 +49,9 @@ public class LoginFragment extends Fragment {
         // Get the FragmentManager and start a transaction
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        // Replace the fragment in the fragment_container_view
         fragmentTransaction.replace(R.id.fragment_container_view, newFragment);
-
-        // Optionally add to the back stack to allow the user to navigate back
         fragmentTransaction.addToBackStack(null);
-
-        // Commit the transaction
         fragmentTransaction.commit();
     }
 }

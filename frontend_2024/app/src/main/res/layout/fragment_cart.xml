@@ -319,7 +319,7 @@
 
     <!-- Login Button -->
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnPagar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Ir a pagar"
