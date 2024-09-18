@@ -40,48 +40,47 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutItem1"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/space">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/itemTitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="8 empanadas"
+                android:text="1/2 Docena de empanadas"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/itemDescription1"
                 android:layout_width="wrap_content"
+                android:padding="5dp"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:padding="5dp"
-                android:text="Ocho empanadas a elección"
-                />
+                android:text="Media docena de empanadas"
 
+                />
             <TextView
                 android:id="@+id/itemPrice1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
                 android:text="$ 9000"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                />
+                android:gravity="center"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <ImageView
