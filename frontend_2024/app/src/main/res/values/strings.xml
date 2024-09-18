@@ -29,4 +29,6 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+    <string name="combo_3_docenas_de_empanadas">Combo 3 Docenas</string>
+    <string name="carrito">Carrito</string>
 </resources>
