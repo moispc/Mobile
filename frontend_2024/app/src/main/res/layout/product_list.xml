@@ -40,23 +40,22 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutItem1"
-        app:layout_constraintTop_toBottomOf="@+id/space"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="150dp"
         android:orientation="horizontal"
         android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
 
-        >
+        app:layout_constraintTop_toBottomOf="@+id/space">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/itemTitle2"
+                android:id="@+id/itemTitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -65,32 +64,31 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/itemDescription2"
-                app:layout_constraintStart_toBottomOf="@+id/itemTitle"
+                android:id="@+id/itemDescription1"
                 android:layout_width="wrap_content"
-                android:padding="5dp"
                 android:layout_height="50dp"
                 android:gravity="center"
+                android:padding="5dp"
                 android:text="Ocho empanadas a elección"
-
                 />
+
             <TextView
-                android:id="@+id/itemPrice2"
-                app:layout_constraintStart_toBottomOf="@+id/itemDescription2"
+                android:id="@+id/itemPrice1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:gravity="center"
                 android:text="$ 9000"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             app:srcCompat="@drawable/img_product_1" />
 
 
@@ -132,7 +130,6 @@
 
             <TextView
                 android:id="@+id/itemDescription2"
-                app:layout_constraintStart_toBottomOf="@+id/itemTitle"
                 android:layout_width="wrap_content"
                 android:padding="5dp"
                 android:layout_height="50dp"
@@ -142,7 +139,6 @@
                 />
             <TextView
                 android:id="@+id/itemPrice2"
-                app:layout_constraintStart_toBottomOf="@+id/itemDescription2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -197,7 +193,6 @@
 
             <TextView
                 android:id="@+id/itemDescription3"
-                app:layout_constraintStart_toBottomOf="@+id/itemTitle3"
                 android:layout_width="wrap_content"
                 android:padding="5dp"
                 android:layout_height="50dp"
@@ -207,7 +202,6 @@
                 />
             <TextView
                 android:id="@+id/itemPrice3"
-                app:layout_constraintStart_toBottomOf="@+id/itemDescription3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
