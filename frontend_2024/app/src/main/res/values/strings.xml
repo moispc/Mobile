@@ -16,4 +16,17 @@
     <string name="registro">Registro</string>
     <string name="registrarse">Registrarse</string>
     <string name="verifique_contrase_a">Verifique Contraseña</string>
+    <string-array name="number_picker_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
 </resources>
