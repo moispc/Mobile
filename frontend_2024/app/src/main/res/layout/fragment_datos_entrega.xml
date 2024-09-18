@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
- >
+        >
 
         <ImageView
             android:layout_width="30dp"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="@string/carrito"
+            android:text="@string/datos_entrega"
             android:textColor="#1a1a1a"
             android:textSize="26sp"
             android:textStyle="bold"
@@ -55,9 +55,9 @@
             android:id="@+id/tvTitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/combo_3_docenas_de_empanadas"
+            android:text="Dirección de entrega"
             android:textColor="#1a1a1a"
-            android:textSize="18sp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -68,7 +68,7 @@
             android:id="@+id/tvSubTitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 33.500"
+            android:text="Siempre viva 123"
             android:textColor="#1a1a1a"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -98,42 +98,15 @@
                 android:paddingHorizontal="16dp"
                 >
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/delete"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tvSubTitle"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"/>
-
-
-                <TextView
-                    android:id="@+id/tvSubTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="1"
-                    android:textColor="#1a1a1a"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tvAdd1"
-                    android:layout_marginEnd="16dp"
-                    />
 
                 <ImageView
                     android:id="@+id/tvAdd1"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/baseline_add_24"
+                    android:src="@drawable/pencil"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
-
-
 
 
 
@@ -180,15 +153,16 @@
         android:background="#fefdf9"
         app:layout_constraintTop_toBottomOf="@+id/item1"
         android:padding="16dp"
+        android:layout_marginTop="2dp"
         >
 
         <TextView
             android:id="@+id/tvTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/combo_3_docenas_de_empanadas"
+            android:text="Método de entrega"
             android:textColor="#1a1a1a"
-            android:textSize="18sp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -199,7 +173,7 @@
             android:id="@+id/tvSubTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 18.000"
+            android:text="30 - 35 min"
             android:textColor="#1a1a1a"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -217,8 +191,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvTitle2"
             app:layout_constraintEnd_toEndOf="parent"
-
             >
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -230,62 +204,91 @@
                 >
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/delete"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tvSubTitle3"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"/>
-
-
-                <TextView
-                    android:id="@+id/tvSubTitle3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="3"
-                    android:textColor="#1a1a1a"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tvAdd2"
-                    android:layout_marginEnd="16dp"
-                    />
-
-                <ImageView
                     android:id="@+id/tvAdd2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/baseline_add_24"
+                    android:src="@drawable/bike"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
-
-
-
-
-
-
-
-
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/item2"
+        android:layout_marginTop="1dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fefdf9"
+        app:layout_constraintTop_toBottomOf="@+id/item2"
+        android:padding="16dp"
+        android:layout_marginTop="2dp"
+        >
+
+        <TextView
+            android:id="@+id/tvTitle3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Costos de envio"
+            android:textColor="#1a1a1a"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="6dp"
+            />
+
+        <TextView
+            android:id="@+id/tvSubTitle3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$280"
+            android:textColor="#1a1a1a"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle3"
+            android:layout_marginTop="26dp"
+            />
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#fefdf9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvTitle3"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@drawable/big_border"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingHorizontal="16dp"
+                >
 
-
-
-
-
-
-
-
+                <ImageView
+                    android:id="@+id/tvAdd4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/money"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -301,34 +304,105 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@+id/item2"/>
+        app:layout_constraintTop_toBottomOf="@+id/item3"/>
 
-    <TextView
-        android:id="@+id/tvClean"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:textColor="#fd9942"
-        android:textStyle="bold"
+        android:background="#fefdf9"
+        app:layout_constraintTop_toBottomOf="@+id/item3"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/item2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_marginTop="2dp"
+        >
+
+        <TextView
+            android:id="@+id/tvTitle4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Método de pago"
+            android:textColor="#1a1a1a"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="6dp"
+            />
+
+        <TextView
+            android:id="@+id/tvSubTitle4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectivo"
+            android:textColor="#1a1a1a"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle4"
+            android:layout_marginTop="26dp"
+            />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#fefdf9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvTitle4"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@drawable/big_border"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingHorizontal="16dp"
+                >
+
+                <ImageView
+                    android:id="@+id/tvAdd3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/baseline_payment_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/item4"/>
+
+
 
     <!-- Login Button -->
     <Button
-        android:id="@+id/btnPagar"
+        android:id="@+id/btnHacerPedido"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Ir a pagar"
+        android:text="Hacer el pedido"
         android:textAllCaps="false"
         android:padding="12dp"
         android:backgroundTint="#00c14d"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvClean"
+        app:layout_constraintTop_toBottomOf="@+id/item4"
         android:layout_marginTop="25dp"
         android:textColor="#fefdf9"
         android:textSize="18sp"
