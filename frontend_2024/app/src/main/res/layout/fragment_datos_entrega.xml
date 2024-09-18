@@ -214,13 +214,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -288,7 +281,7 @@
                 >
 
                 <ImageView
-                    android:id="@+id/tvAdd3"
+                    android:id="@+id/tvAdd4"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/money"
