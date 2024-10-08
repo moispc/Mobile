@@ -62,10 +62,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment_container_view, new LoginFragment());
+        fragmentTransaction.replace(R.id.fragment_container_view, new ProfileFragment());
         fragmentTransaction.commit();
     }
-
 
     // You can add methods to show other fragments like SearchFragment or ProfileFragment
     public void mostrarProductos() {
