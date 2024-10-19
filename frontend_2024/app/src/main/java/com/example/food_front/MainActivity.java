@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                     mostrarPerfil(); // Show ProfileFragment
                     return true;
                 } else if (itemId == R.id.carrito) {
-                    mostrarProductos(); // Show CartFragment
+                    mostrarCarrito(); // Show CartFragment
                     return true;
                 } else if (itemId == R.id.contact) {
 //                    mostrarContact(); // Show ContactFragment
@@ -68,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     // You can add methods to show other fragments like SearchFragment or ProfileFragment
-    public void mostrarProductos() {
+    public void mostrarCarrito() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment_container_view, new ProductsFragment());
+        fragmentTransaction.replace(R.id.fragment_container_view, new CartFragment());
         fragmentTransaction.commit();
     }
+
+
 
 }
