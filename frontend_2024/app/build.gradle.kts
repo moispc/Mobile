@@ -49,5 +49,5 @@ dependencies {
 
 //    implementation("androidx.fragment:fragment:1.8.3")
     implementation(libs.fragment)
-
+    implementation(libs.volley)
 }
