@@ -39,14 +39,12 @@ public class MainActivity extends AppCompatActivity {
                     mostrarProductos(); // Show CartFragment
                     return true;
                 } else if (itemId == R.id.contact) {
-//                    mostrarContact(); // Show ContactFragment
+                    mostrarContact(); // Show ContactFragment
                     return true;
                 }
-
                 return false;
             }
         });
-
     }
 
     public void mostrarHome() {
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    // You can add methods to show other fragments like SearchFragment or ProfileFragment
     public void mostrarPerfil() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -66,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    // You can add methods to show other fragments like SearchFragment or ProfileFragment
     public void mostrarProductos() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -75,4 +71,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    public void mostrarContact() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_container_view, new ContactFragment());
+        fragmentTransaction.commit();
+    }
 }
