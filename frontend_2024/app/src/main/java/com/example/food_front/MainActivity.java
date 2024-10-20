@@ -2,7 +2,6 @@ package com.example.food_front;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.profile) {
                     mostrarPerfil(); // Show ProfileFragment
                     return true;
-                } else if (itemId == R.id.carrito) {
+                } else if (itemId == R.id.recyclerview_carrito) {
                     mostrarCarrito(); // Show CartFragment
                     return true;
                 } else if (itemId == R.id.contact) {
