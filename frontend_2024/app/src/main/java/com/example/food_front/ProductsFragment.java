@@ -21,13 +21,16 @@ import com.android.volley.toolbox.Volley;
 import com.example.food_front.adapters.ProductoAdapter;
 import com.example.food_front.models.Carrito;
 import com.example.food_front.models.Producto;
+import com.example.food_front.utils.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductsFragment extends Fragment {
 
@@ -42,7 +45,7 @@ public class ProductsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview_producto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        carrito = new Carrito(); // Inicializamos el carrito
+        carrito = Carrito.getInstance(); // Obtiene la instancia del carrito
 
         productList = new ArrayList<>();
         adapter = new ProductoAdapter(productList, new ProductoAdapter.OnProductoClickListener() {
@@ -51,8 +54,9 @@ public class ProductsFragment extends Fragment {
                 // Guardar en el carrito local
                 carrito.agregarProducto(producto);
                 Toast.makeText(getContext(), "Producto agregado al carrito", Toast.LENGTH_SHORT).show();
-                // Aquí podrías llamar a la función para actualizar el ícono del carrito
-                // actualizarIconoCarrito();
+
+                // Agregar producto al carrito en la base de datos
+                agregarProductoAlCarrito(producto.getIdProducto()); // Cambia la cantidad según sea necesario
             }
         });
 
@@ -107,5 +111,52 @@ public class ProductsFragment extends Fragment {
 
         // Añadir la solicitud a la cola
         Volley.newRequestQueue(getContext()).add(stringRequest);
+    }
+
+    private void agregarProductoAlCarrito(int idProducto) {
+        String url = "https://backmobile1.onrender.com/appCART/agregar/" + idProducto + "/";
+
+        SessionManager sessionManager = new SessionManager(getContext());
+        String token = sessionManager.getToken();
+        Log.d("AuthToken", "Token usado en la solicitud: " + token);
+
+        if (token != null) {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    response -> {
+                        // Maneja la respuesta aquí, por ejemplo, muestra un mensaje de éxito
+                        Toast.makeText(getContext(), "Producto agregado al carrito en la base de datos", Toast.LENGTH_SHORT).show();
+                    },
+                    error -> {
+                        // Maneja el error aquí
+                        Log.e("ProductsFragment", "Error al agregar al carrito: " + error.getMessage());
+                        if (error.networkResponse != null) {
+                            Log.e("ProductsFragment", "Código de respuesta: " + error.networkResponse.statusCode);
+                        }
+                        Toast.makeText(getContext(), "Error al agregar producto al carrito", Toast.LENGTH_SHORT).show();
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token); // Usa el token almacenado
+                    Log.d("HeadersDebug", "Headers: " + headers); // Verificar que se envíen los headers
+                    return headers;
+                }
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("direccion", "casa"); // Dirección hardcodeada
+                    params.put("cantidad", "1"); // Cantidad fija
+                    Log.d("ParamsDebug", "Params: " + params); // Verificar que se envíen los parámetros
+                    return params;
+                }
+            };
+
+            // Añadir la solicitud a la cola
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+        } else {
+            // Maneja el caso en que no hay token
+            Toast.makeText(getContext(), "Debes iniciar sesión para agregar productos al carrito", Toast.LENGTH_SHORT).show();
+        }
     }
 }

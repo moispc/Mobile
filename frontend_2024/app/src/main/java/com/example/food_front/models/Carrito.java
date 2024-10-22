@@ -1,35 +1,46 @@
 package com.example.food_front.models;
 
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class Carrito {
-    private List<Producto> productos = new ArrayList<>();
+    private static Carrito instance;
+    private ArrayList<Producto> productos;
 
+    // Constructor privado para evitar instanciación
+    private Carrito() {
+        productos = new ArrayList<>();
+    }
+
+    // Método para obtener la instancia del carrito (Singleton)
+    public static Carrito getInstance() {
+        if (instance == null) {
+            instance = new Carrito();
+        }
+        return instance;
+    }
+
+    // Método para agregar productos al carrito
     public void agregarProducto(Producto producto) {
         productos.add(producto);
     }
 
+    // Método para agregar una lista de productos al carrito
+    public void agregarProductos(ArrayList<Producto> productos) {
+        this.productos.addAll(productos);
+    }
+
+    // Método para eliminar un producto del carrito
     public void eliminarProducto(Producto producto) {
-        for (int i = 0; i < productos.size(); i++) {
-            if (productos.get(i).getIdProducto() == producto.getIdProducto()) {
-                productos.remove(i);
-                break;
-            }
-        }
+        productos.remove(producto);
     }
 
-    public int obtenerCantidadProductos() {
-        return productos.size();
-    }
-
-    public List<Producto> obtenerProductos() {
+    // Método para obtener la lista de productos del carrito
+    public ArrayList<Producto> obtenerProductos() {
         return productos;
     }
 
+    // Método para limpiar el carrito
     public void limpiarCarrito() {
         productos.clear();
     }
 }
-
