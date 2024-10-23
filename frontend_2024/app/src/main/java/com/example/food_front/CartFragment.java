@@ -4,126 +4,128 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.food_front.adapters.CarritoAdapter;
+import com.example.food_front.models.Carrito;
+import com.example.food_front.models.Producto;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class CartFragment extends Fragment {
 
-    private int quantity1 = 1; // Cantidad del primer producto
-    private int quantity2 = 3; // Cantidad del segundo producto
+    private RecyclerView recyclerViewCarrito;
+    private CarritoAdapter carritoAdapter;
+    private Carrito carrito;  // Instancia del carrito
+    private TextView totalPrecio;
+    private RequestQueue requestQueue; // Cola de solicitudes de Volley
 
-    private TextView tvSubTitle1, tvSubTitle2;
-    private Button btnPagar;
-
-    public CartFragment() {
-        // Required empty public constructor
-    }
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        // Inicializar las vistas
-        tvSubTitle1 = view.findViewById(R.id.tvSubTitle);
-        tvSubTitle2 = view.findViewById(R.id.tvSubTitle3);
-        btnPagar = view.findViewById(R.id.btnPagar);
-        TextView tvFecha = view.findViewById(R.id.tvFecha); // Inicializa el TextView de la fecha
-        ImageView btnBack = view.findViewById(R.id.btnBack);
+        recyclerViewCarrito = view.findViewById(R.id.recyclerview_carrito);
+        recyclerViewCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        // Inicializar las cantidades
-        updateQuantityDisplay();
+        totalPrecio = view.findViewById(R.id.text_total_precio);
 
-        // Listener para el botón de pagar
-        btnPagar.setOnClickListener(new View.OnClickListener() {
+        // Inicializa la cola de solicitudes
+        requestQueue = Volley.newRequestQueue(getContext());
+
+        // Inicializa el carrito
+        carrito = Carrito.getInstance();
+        carritoAdapter = new CarritoAdapter(carrito.obtenerProductos(), new CarritoAdapter.OnProductoClickListener() {
             @Override
-            public void onClick(View v) {
-                replaceFragment(new DatosEntregaFragment());
+            public void onEliminarProductoClick(Producto producto) {
+                eliminarProductoDelCarrito(producto);
             }
         });
 
-        // Listener para la flecha de retroceso
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requireActivity().onBackPressed();  // Regresar a la pantalla anterior
-            }
-        });
+        recyclerViewCarrito.setAdapter(carritoAdapter);
+        actualizarTotal();  // Actualiza el total al cargar los productos
 
-        // Listener para sumar y restar del primer producto
-        ImageView btnAdd1 = view.findViewById(R.id.tvAdd1);
-        ImageView btnRemove1 = view.findViewById(R.id.delete);
-
-        btnAdd1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                quantity1++;
-                updateQuantityDisplay();
-            }
-        });
-
-        btnRemove1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (quantity1 > 1) {
-                    quantity1--;
-                } else {
-                    quantity1 = 0;
-                }
-                updateQuantityDisplay();
-            }
-        });
-
-        // Listener para sumar y restar del segundo producto
-        ImageView btnAdd2 = view.findViewById(R.id.tvAdd2);
-        ImageView btnRemove2 = view.findViewById(R.id.delete2);
-
-        btnAdd2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                quantity2++;
-                updateQuantityDisplay();
-            }
-        });
-
-        btnRemove2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (quantity2 > 1) {
-                    quantity2--;
-                } else {
-                    quantity2 = 0;
-                }
-                updateQuantityDisplay();
-            }
-        });
+        // Cargar los productos desde la API
+        cargarProductosDesdeAPI();
 
         return view;
     }
 
-    private void updateQuantityDisplay() {
-        tvSubTitle1.setText(String.valueOf(quantity1));
-        tvSubTitle2.setText(String.valueOf(quantity2));
+    private void cargarProductosDesdeAPI() {
+        String url = "https://backmobile1.onrender.com/appCART/ver/"; // Cambia esta URL según tu API
 
-        // Habilitar o deshabilitar el botón de pagar
-        if (quantity1 == 0 && quantity2 == 0) {
-            btnPagar.setEnabled(false); // Deshabilitar botón
-        } else {
-            btnPagar.setEnabled(true); // Habilitar botón
-        }
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray productosArray = response.getJSONArray("productos"); // Ajusta según tu respuesta
+                            ArrayList<Producto> productos = new ArrayList<>();
+
+                            for (int i = 0; i < productosArray.length(); i++) {
+                                JSONObject productoJson = productosArray.getJSONObject(i);
+                                Producto producto = new Producto(
+                                        Integer.parseInt(productoJson.getString("id")), // Ajusta según tu modelo
+                                        productoJson.getString("nombre"),
+                                        productoJson.getString("descripcion"),
+                                        productoJson.getDouble("precio"),
+                                        productoJson.getString("imagenUrl") // Ajusta según tu modelo
+                                );
+                                productos.add(producto);
+                            }
+
+                            carrito.agregarProductos(productos); // Agrega los productos al carrito
+                            carritoAdapter.notifyDataSetChanged(); // Notifica al adaptador que los datos han cambiado
+                            actualizarTotal(); // Actualiza el total
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Error al cargar productos", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getContext(), "Error en la solicitud", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest); // Agrega la solicitud a la cola
     }
 
-    private void replaceFragment(Fragment newFragment) {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_view, newFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    private void eliminarProductoDelCarrito(Producto producto) {
+        // Lógica para eliminar el producto del carrito
+        carrito.eliminarProducto(producto);
+        carritoAdapter.notifyDataSetChanged();
+        actualizarTotal();  // Actualiza el total cuando se elimina un producto
+        Toast.makeText(getContext(), "Producto eliminado del carrito", Toast.LENGTH_SHORT).show();
+    }
+
+    private void actualizarTotal() {
+        double total = 0;
+        for (Producto producto : carrito.obtenerProductos()) {
+            total += producto.getPrecio();
+        }
+        // Muestra el total formateado con dos decimales
+        totalPrecio.setText(String.format("Total: $%.2f", total));
     }
 }
