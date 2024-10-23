@@ -5,12 +5,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,16 +46,28 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private CarritoAdapter adapter;
     private List<Carrito> carritoList;
+    private int precioTotal;
+    TextView tvTotal;
+    Button btnConfirmar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         recyclerView = view.findViewById(R.id.recyclerview_carrito);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        tvTotal = view.findViewById(R.id.text_total_precio);
+        btnConfirmar = view.findViewById(R.id.button_confirmar_pedido);
+
+        btnConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rediretToCheckout();
+            }
+        });
 
         carritoList = new ArrayList<>();
 
-        CarritoAdapter.OnClickListener borrarCarritoListener = new CarritoAdapter.OnClickListener() {
+        CarritoAdapter.OnClickListener carritoListener = new CarritoAdapter.OnClickListener() {
             @Override
             public void onDeleteClick(Carrito carrito) {
                 borrardelCarrito(carrito.getIdCarrito());
@@ -74,7 +93,7 @@ public class CartFragment extends Fragment {
             }
         };
 
-        adapter = new CarritoAdapter(carritoList, borrarCarritoListener);
+        adapter = new CarritoAdapter(carritoList, carritoListener);
 
 
 
@@ -111,10 +130,14 @@ public class CartFragment extends Fragment {
                                     double precio = jsonObject.getDouble("precio");
                                     String imagenUrl = jsonObject.getString("imageURL");
 
+                                    precioTotal += cantidad * precio;
+
                                     // Crear un nuevo objeto Producto
                                     Carrito carrito = new Carrito(id_carrito, nombre_producto, cantidad, precio, imagenUrl);
                                     carritoList.add(carrito);  // Añadir a la lista
                                 }
+                                tvTotal.setText("Total: $" + precioTotal);
+
 
                                 // Notificar al adaptador que los datos han cambiado
                                 adapter.notifyDataSetChanged();
@@ -250,4 +273,12 @@ public class CartFragment extends Fragment {
             Toast.makeText(getContext(), "Debes iniciar sesión para agregar productos al carrito", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void rediretToCheckout() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, new DatosEntregaFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        }
 }

@@ -113,13 +113,10 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoV
 
     // ViewHolder que almacena las referencias a los elementos del layout de cada ítem
     static class CarritoViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewProducto;
-        TextView textViewProducto;
-        TextView textViewPrecio;
-        TextView textCantidad;
-        ImageView buttonBorrarCarrito; // Referencia al botón
-        Button buttonAddCarrito;
-        Button buttonMinusCarrito;
+        ImageView imageViewProducto, buttonBorrarCarrito;
+        TextView textViewProducto, textViewPrecio, textCantidad;
+        Button buttonAddCarrito, buttonMinusCarrito;
+
 
         public CarritoViewHolder(@NonNull View itemView) {
             super(itemView);
