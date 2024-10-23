@@ -1,61 +1,75 @@
 package com.example.food_front.adapters;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.food_front.R;
-import com.example.food_front.models.Carrito;
+import com.example.food_front.models.Producto;
 
 import java.util.List;
 
-public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder>{
-    // listado del carrito
-    private List<Carrito> listaCarrito;
+public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder> {
 
-    //constructor que recibe el listado del carrito
-    public CarritoAdapter(List<Carrito> listaCarrito){
-        this.listaCarrito = listaCarrito;
+    private List<Producto> productos;
+    private OnProductoClickListener listener;
+
+    public CarritoAdapter(List<Producto> productos, OnProductoClickListener listener) {
+        this.productos = productos;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-
-    // infla el layout para cada item del carrito (creando la vista)
-
-    public CarritoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_carrito, parent, false);
+    public CarritoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_cart, parent, false);
         return new CarritoViewHolder(view);
-
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CarritoAdapter.CarritoViewHolder holder, int position) {
-        Carrito carrito = listaCarrito.get(position);
-        holder.textViewNombre.setText(carrito.getProducto());
-        holder.textViewCantidad.setText(carrito.getCantidad());
-        holder.textViewPrecio.setText(carrito.getPrecio());
+    public void onBindViewHolder(@NonNull CarritoViewHolder holder, int position) {
+        Producto producto = productos.get(position);
+        holder.nombreProducto.setText(producto.getNombre());
+        holder.precioProducto.setText(String.valueOf(producto.getPrecio()));
 
+//        // Cargar la imagen usando Glide
+//        Glide.with(holder.itemView.getContext())
+//                .load(producto.getImagenUrl())
+//                .into(holder.imageproducto);
+
+        holder.eliminarProducto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onEliminarProductoClick(producto);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return listaCarrito.size();
+        return productos.size();
     }
 
-    static class CarritoViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewNombre;
-        TextView textViewCantidad;
-        TextView textViewPrecio;
+    public static class CarritoViewHolder extends RecyclerView.ViewHolder {
+        TextView nombreProducto, precioProducto;
+        ImageView eliminarProducto;
 
-
-        public  CarritoViewHolder(@NonNull View itemView){
+        public CarritoViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewNombre = itemView.findViewById(R.id.textViewNombre);
-            textViewCantidad = itemView.findViewById(R.id.textViewCantidad);
-            textViewPrecio = itemView.findViewById(R.id.textViewPrecio);
+            nombreProducto = itemView.findViewById(R.id.text_nombre_producto);
+            precioProducto = itemView.findViewById(R.id.text_precio_producto);
+            eliminarProducto = itemView.findViewById(R.id.image_eliminar_producto);
         }
+    }
+
+    public interface OnProductoClickListener {
+        void onEliminarProductoClick(Producto producto);
     }
 }
