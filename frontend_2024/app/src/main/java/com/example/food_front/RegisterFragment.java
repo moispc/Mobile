@@ -173,4 +173,3 @@ public class RegisterFragment extends Fragment {
         fragmentTransaction.commit();
     }
 }
-
