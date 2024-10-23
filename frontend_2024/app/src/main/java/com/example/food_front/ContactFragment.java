@@ -46,12 +46,41 @@ public class ContactFragment extends Fragment {
         String apellido = etApellido.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String mensaje = etMensaje.getText().toString().trim();
-
+        String regex = "^[a-zA-Z\\s]+$"; // Permite solo letras, números y espacios
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}";
         if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || mensaje.isEmpty()) {
             Toast.makeText(getContext(), "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
+        };
+        if (!nombre.matches(regex)) {
+            // Mostrar un mensaje de error al usuario
+            Toast.makeText(getContext(), "Entrada no válida", Toast.LENGTH_SHORT).show();
         }
-
+        if (nombre.length()>15){
+            Toast.makeText(getContext(), "El nombre es demasiado largo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!apellido.matches(regex)) {
+            // Mostrar un mensaje de error al usuario
+            Toast.makeText(getContext(), "Entrada no válida", Toast.LENGTH_SHORT).show();
+        }
+        if (apellido.length()<3 || apellido.length()>15){
+            Toast.makeText(getContext(), "El apellido debe tener entre más de 3 y  hasta 15 caracteres", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!email.matches(emailPattern)) {
+            Toast.makeText(getContext(), "El email no es válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mensaje.length()<5 || mensaje.length()>100){
+            Toast.makeText(getContext(), "El mensaje  debe contener de 5 a 100 carateres", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mensaje.matches(regex)) {
+            // Mostrar un mensaje de error al usuario
+            Toast.makeText(getContext(), "El texto del mensaje no es válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // Aquí puedes implementar la lógica para enviar el mensaje (por ejemplo, a través de una API)
         Toast.makeText(getContext(), "Mensaje enviado", Toast.LENGTH_SHORT).show();
     }

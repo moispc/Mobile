@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.food_front.utils.ProfileManager;
 import com.example.food_front.utils.SessionManager;
 
 import org.json.JSONException;
@@ -31,10 +32,12 @@ public class LoginFragment extends Fragment {
 
     private EditText etCorreo, etPassword;
     private SessionManager sessionManager;
+    private ProfileManager profileManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // Inicializar las vistas
@@ -44,6 +47,7 @@ public class LoginFragment extends Fragment {
         TextView tvRegister = view.findViewById(R.id.tvRegister);
 
         sessionManager = new SessionManager(requireContext());
+        profileManager = new ProfileManager(requireContext());
 
         // Agregar el click listener al boton de login
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -64,25 +68,14 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+
     private void performLogin() {
         String email = etCorreo.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
         // Controlar que no haya imputs vacios
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validar formato de correo electrónico
-        if (!isValidEmail(email)) {
-            Toast.makeText(getContext(), "El correo electrónico no tiene un formato válido", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validar la contraseña
-        if (!isValidPassword(password)) {
-            Toast.makeText(getContext(), "La contraseña debe tener al menos 4 caracteres y al menos un número", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -105,32 +98,28 @@ public class LoginFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             String token = response.getString("access");
+                            String name = response.getString("nombre");
+                            String surname = response.getString("apellido");
+                            String email = response.getString("email");
                             sessionManager.saveToken(token);  // Save token for future use
-                            Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                            profileManager.saveInfo(name, surname, email);  // Save info for future use
+                            Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
                             replaceFragment(new HomeFragment());
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "Respuesta inválida del servidor", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Invalid response from server", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "Error en el inicio de sesión", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Agregar la request a la queue de Volley
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(request);
-    }
-
-    private boolean isValidEmail(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private boolean isValidPassword(String password) {
-        return password.length() >= 4 && password.matches(".*\\d.*");
     }
 
     private void replaceFragment(Fragment newFragment) {

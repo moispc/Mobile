@@ -55,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.profile) {
                     mostrarPerfil(); // Show ProfileFragment
                     return true;
+                } else if (itemId == R.id.menu) {
+                    mostrarProductos(); // Show ProductsFragment
+                    return true;
                 } else if (itemId == R.id.carrito) {
-                    mostrarProductos(); // Show CartFragment
+                    mostrarCarrito(); // Show CartFragment
                     return true;
                 } else if (itemId == R.id.contact) {
                     mostrarContact(); // Show ContactFragment
@@ -96,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.replace(R.id.fragment_container_view, new ProductsFragment());
+        fragmentTransaction.commit();
+    }
+
+    public void mostrarCarrito() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_container_view, new CartFragment());
         fragmentTransaction.commit();
     }
 

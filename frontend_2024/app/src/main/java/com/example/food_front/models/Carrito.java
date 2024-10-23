@@ -1,46 +1,42 @@
 package com.example.food_front.models;
 
-import java.util.ArrayList;
-
 public class Carrito {
-    private static Carrito instance;
-    private ArrayList<Producto> productos;
+    private int idCarrito;
+    private String producto;
+    private int cantidad;
+    private double precio;
+    private String imageURL;
 
-    // Constructor privado para evitar instanciación
-    private Carrito() {
-        productos = new ArrayList<>();
+    // Constructor
+    public Carrito(int idCarrito, String producto, int cantidad, double precio, String imageURL) {
+        this.idCarrito = idCarrito;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precio = precio * cantidad;
+        // Verifica si la URL de la imagen es null y maneja esto adecuadamente
+        this.imageURL = (imageURL != null) ? imageURL : ""; // Asignar una cadena vacía si es null
     }
 
-    // Método para obtener la instancia del carrito (Singleton)
-    public static Carrito getInstance() {
-        if (instance == null) {
-            instance = new Carrito();
-        }
-        return instance;
+    // Método para obtener el ID
+    public int getIdCarrito() {
+        return idCarrito; // Este es el método que necesitas
     }
 
-    // Método para agregar productos al carrito
-    public void agregarProducto(Producto producto) {
-        productos.add(producto);
+    // Getters
+    public String getProducto() {
+        return producto;
     }
 
-    // Método para agregar una lista de productos al carrito
-    public void agregarProductos(ArrayList<Producto> productos) {
-        this.productos.addAll(productos);
+    public int getCantidad() {
+        return cantidad;
     }
 
-    // Método para eliminar un producto del carrito
-    public void eliminarProducto(Producto producto) {
-        productos.remove(producto);
+    public double getPrecio() {
+        return precio;
     }
 
-    // Método para obtener la lista de productos del carrito
-    public ArrayList<Producto> obtenerProductos() {
-        return productos;
+    public String getImagenUrl() {
+        return imageURL;
     }
 
-    // Método para limpiar el carrito
-    public void limpiarCarrito() {
-        productos.clear();
-    }
 }
