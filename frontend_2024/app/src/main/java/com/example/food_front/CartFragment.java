@@ -1,10 +1,10 @@
 package com.example.food_front;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,115 +17,237 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.food_front.adapters.CarritoAdapter;
+import com.example.food_front.adapters.ProductoAdapter;
 import com.example.food_front.models.Carrito;
 import com.example.food_front.models.Producto;
+import com.example.food_front.utils.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CartFragment extends Fragment {
 
-    private RecyclerView recyclerViewCarrito;
-    private CarritoAdapter carritoAdapter;
-    private Carrito carrito;  // Instancia del carrito
-    private TextView totalPrecio;
-    private RequestQueue requestQueue; // Cola de solicitudes de Volley
+    private RecyclerView recyclerView;
+    private CarritoAdapter adapter;
+    private List<Carrito> carritoList;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        recyclerView = view.findViewById(R.id.recyclerview_carrito);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerViewCarrito = view.findViewById(R.id.recyclerview_carrito);
-        recyclerViewCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
+        carritoList = new ArrayList<>();
 
-
-        totalPrecio = view.findViewById(R.id.text_total_precio);
-
-        // Inicializa la cola de solicitudes
-        requestQueue = Volley.newRequestQueue(getContext());
-
-        // Inicializa el carrito
-        carrito = Carrito.getInstance();
-        carritoAdapter = new CarritoAdapter(carrito.obtenerProductos(), new CarritoAdapter.OnProductoClickListener() {
+        CarritoAdapter.OnClickListener borrarCarritoListener = new CarritoAdapter.OnClickListener() {
             @Override
-            public void onEliminarProductoClick(Producto producto) {
-                eliminarProductoDelCarrito(producto);
+            public void onDeleteClick(Carrito carrito) {
+                borrardelCarrito(carrito.getIdCarrito());
+                Toast.makeText(getContext(), "Producto borrado del carrito", Toast.LENGTH_SHORT).show();
             }
-        });
 
-        recyclerViewCarrito.setAdapter(carritoAdapter);
-        actualizarTotal();  // Actualiza el total al cargar los productos
+            @Override
+            public void onAddClick(Carrito carrito) {
+                int cantidad = carrito.getCantidad() + 1;
 
-        // Cargar los productos desde la API
-        cargarProductosDesdeAPI();
+                actualizarCantidad(carrito.getIdCarrito(), cantidad);
+                Toast.makeText(getContext(), "Producto actualizado con éxito", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onMinusClick(Carrito carrito) {
+                int cantidad = carrito.getCantidad() - 1;
+                if (cantidad == 0 ) {
+                    return;
+                }
+                actualizarCantidad(carrito.getIdCarrito(), cantidad);
+                Toast.makeText(getContext(), "Producto actualizado con éxito", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        adapter = new CarritoAdapter(carritoList, borrarCarritoListener);
+
+
+
+        recyclerView.setAdapter(adapter);
+        cargarCarritos();
 
         return view;
     }
 
-    private void cargarProductosDesdeAPI() {
-        String url = "https://backmobile1.onrender.com/appCART/ver/"; // Cambia esta URL según tu API
+    private void cargarCarritos() {
+        String url = "https://backmobile1.onrender.com/appCART/ver/";
 
+        SessionManager sessionManager = new SessionManager(getContext());
+        String token = sessionManager.getToken();
+        Log.d("AuthToken", "Token usado en la solicitud: " + token);
 
+        if (token != null) {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                // Parsear el JSON
+                                JSONArray jsonArray = new JSONArray(response);
+                                carritoList.clear();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray productosArray = response.getJSONArray("productos"); // Ajusta según tu respuesta
-                            ArrayList<Producto> productos = new ArrayList<>();
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                            for (int i = 0; i < productosArray.length(); i++) {
-                                JSONObject productoJson = productosArray.getJSONObject(i);
-                                Producto producto = new Producto(
-                                        Integer.parseInt(productoJson.getString("id")), // Ajusta según tu modelo
-                                        productoJson.getString("nombre"),
-                                        productoJson.getString("descripcion"),
-                                        productoJson.getDouble("precio"),
-                                        productoJson.getString("imagenUrl") // Ajusta según tu modelo
-                                );
-                                productos.add(producto);
+                                    // Obtener los detalles del producto desde el JSON
+                                    int id_carrito = jsonObject.getInt("id");
+                                    String nombre_producto = jsonObject.getString("producto");
+                                    int cantidad = jsonObject.getInt("cantidad");
+                                    double precio = jsonObject.getDouble("precio");
+                                    String imagenUrl = jsonObject.getString("imageURL");
+
+                                    // Crear un nuevo objeto Producto
+                                    Carrito carrito = new Carrito(id_carrito, nombre_producto, cantidad, precio, imagenUrl);
+                                    carritoList.add(carrito);  // Añadir a la lista
+                                }
+
+                                // Notificar al adaptador que los datos han cambiado
+                                adapter.notifyDataSetChanged();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e("CarritoFragment", "Error al parsear el JSON: " + e.getMessage());
                             }
-
-                            carrito.agregarProductos(productos); // Agrega los productos al carrito
-                            carritoAdapter.notifyDataSetChanged(); // Notifica al adaptador que los datos han cambiado
-                            actualizarTotal(); // Actualiza el total
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(), "Error al cargar productos", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(getContext(), "Error en la solicitud", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        requestQueue.add(jsonObjectRequest); // Agrega la solicitud a la cola
-    }
-
-    private void eliminarProductoDelCarrito(Producto producto) {
-        // Lógica para eliminar el producto del carrito
-        carrito.eliminarProducto(producto);
-        carritoAdapter.notifyDataSetChanged();
-        actualizarTotal();  // Actualiza el total cuando se elimina un producto
-        Toast.makeText(getContext(), "Producto eliminado del carrito", Toast.LENGTH_SHORT).show();
-    }
-
-    private void actualizarTotal() {
-        double total = 0;
-        for (Producto producto : carrito.obtenerProductos()) {
-            total += producto.getPrecio();
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("CarritoFragment", "Error en la solicitud: " + error.getMessage());
+                    Toast.makeText(getContext(), "Error al cargar carritos", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token); // Usa el token almacenado
+                    Log.d("HeadersDebug", "Headers: " + headers); // Verificar que se envíen los headers
+                    return headers;
+                }
+            };
+            // Añadir la solicitud a la cola
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+        } else {
+            // Maneja el caso en que no hay token
+            Toast.makeText(getContext(), "Debes iniciar sesión para agregar productos al carrito", Toast.LENGTH_SHORT).show();
         }
-        // Muestra el total formateado con dos decimales
-        totalPrecio.setText(String.format("Total: $%.2f", total));
+
+
+
+
+    }
+
+    private void borrardelCarrito(int idProducto) {
+        String url = "https://backmobile1.onrender.com/appCART/eliminar/" + idProducto + "/";
+
+        SessionManager sessionManager = new SessionManager(getContext());
+        String token = sessionManager.getToken();
+        Log.d("AuthToken", "Token usado en la solicitud: " + token);
+
+        if (token != null) {
+            StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+                    response -> {
+                        // Maneja la respuesta aquí, por ejemplo, muestra un mensaje de éxito
+                        Toast.makeText(getContext(), "Carrito borrado de la base de datos", Toast.LENGTH_SHORT).show();
+                        cargarCarritos();
+                    },
+                    error -> {
+                        // Maneja el error aquí
+                        Log.e("CartFragment", "Error al borrar carrito: " + error.getMessage());
+                        if (error.networkResponse != null) {
+                            Log.e("CartFragment", "Código de respuesta: " + error.networkResponse.statusCode);
+                        }
+                        Toast.makeText(getContext(), "Error al borrar carrito", Toast.LENGTH_SHORT).show();
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token); // Usa el token almacenado
+                    Log.d("HeadersDebug", "Headers: " + headers); // Verificar que se envíen los headers
+                    return headers;
+                }
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    return params;
+                }
+            };
+
+            // Añadir la solicitud a la cola
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+        } else {
+            // Maneja el caso en que no hay token
+            Toast.makeText(getContext(), "Debes iniciar sesión para agregar productos al carrito", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void actualizarCantidad(int idProducto, int cantidad) {
+        String url = "https://backmobile1.onrender.com/appCART/modificar_cantidad/" + idProducto + "/";
+
+        SessionManager sessionManager = new SessionManager(getContext());
+        String token = sessionManager.getToken();
+        Log.d("AuthToken", "Token usado en la solicitud: " + token);
+
+        // Crear el json que se enviará en el body
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("cantidad", cantidad);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (token != null) {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, requestBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(getContext(), "update successful", Toast.LENGTH_SHORT).show();
+                            cargarCarritos();
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getContext(), "Update failed", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token); // Usa el token almacenado
+                    Log.d("HeadersDebug", "Headers: " + headers); // Verificar que se envíen los headers
+                    return headers;
+                }
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    return params;
+                }
+            };
+
+            // Añadir la solicitud a la cola
+            RequestQueue queue = Volley.newRequestQueue(requireContext());
+            queue.add(request);
+        } else {
+            // Maneja el caso en que no hay token
+            Toast.makeText(getContext(), "Debes iniciar sesión para agregar productos al carrito", Toast.LENGTH_SHORT).show();
+        }
     }
 }
