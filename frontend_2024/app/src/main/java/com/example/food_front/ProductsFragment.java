@@ -37,7 +37,6 @@ public class ProductsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductoAdapter adapter;
     private List<Producto> productList;
-    private Carrito carrito; // Instancia del carrito
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,16 +44,11 @@ public class ProductsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview_producto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        carrito = Carrito.getInstance(); // Obtiene la instancia del carrito
-
         productList = new ArrayList<>();
         adapter = new ProductoAdapter(productList, new ProductoAdapter.OnProductoClickListener() {
             @Override
             public void onAgregarCarritoClick(Producto producto) {
-                // Guardar en el carrito local
-                carrito.agregarProducto(producto);
                 Toast.makeText(getContext(), "Producto agregado al carrito", Toast.LENGTH_SHORT).show();
-
                 // Agregar producto al carrito en la base de datos
                 agregarProductoAlCarrito(producto.getIdProducto()); // Cambia la cantidad según sea necesario
             }
