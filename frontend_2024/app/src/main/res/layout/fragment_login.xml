@@ -16,9 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="100dp"/>
 
-
-
-    <!-- Title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -35,8 +32,6 @@
         android:layout_marginTop="60dp"
         />
 
-
-    <!-- Username Field -->
     <EditText
         android:id="@+id/etCorreo"
         android:layout_width="0dp"
@@ -50,7 +45,6 @@
         android:background="@drawable/border"
         />
 
-    <!-- Password Field -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="0dp"
@@ -65,7 +59,6 @@
         android:layout_marginTop="5dp"
         />
 
-    <!-- Forgot Password -->
     <TextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
@@ -79,7 +72,6 @@
         app:layout_constraintEnd_toEndOf="@id/etPassword"
         />
 
-    <!-- Login Button -->
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
@@ -97,9 +89,6 @@
         android:textStyle="bold"
         />
 
-
-
-    <!-- Forgot Password -->
     <TextView
         android:id="@+id/tvRegister"
         android:layout_width="wrap_content"
@@ -112,5 +101,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
