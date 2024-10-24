@@ -16,7 +16,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.food_front.utils.SessionManager;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatosEntregaFragment extends Fragment {
 
@@ -50,6 +54,9 @@ public class DatosEntregaFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         String url = "https://backmobile1.onrender.com/appCART/confirmar/";
 
+        SessionManager sessionManager = new SessionManager(requireContext());
+        String token = sessionManager.getToken();
+
         // POST request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -67,7 +74,14 @@ public class DatosEntregaFragment extends Fragment {
                         Snackbar.LENGTH_LONG).show();
                 Log.e("VolleyError", "Detalles del error", error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token); // Añadir el token aquí
+                return headers;
+            }
+        };
 
         // Add the request to the queue
         queue.add(stringRequest);
