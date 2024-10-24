@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.food_front.utils.ProfileManager;
 import com.example.food_front.utils.SessionManager;
 
 import org.json.JSONException;
@@ -31,6 +32,7 @@ public class LoginFragment extends Fragment {
 
     private EditText etCorreo, etPassword;
     private SessionManager sessionManager;
+    private ProfileManager profileManager;
 
     @Nullable
     @Override
@@ -45,6 +47,7 @@ public class LoginFragment extends Fragment {
         TextView tvRegister = view.findViewById(R.id.tvRegister);
 
         sessionManager = new SessionManager(requireContext());
+        profileManager = new ProfileManager(requireContext());
 
         // Agregar el click listener al boton de login
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +98,11 @@ public class LoginFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             String token = response.getString("access");
+                            String name = response.getString("nombre");
+                            String surname = response.getString("apellido");
+                            String email = response.getString("email");
                             sessionManager.saveToken(token);  // Save token for future use
+                            profileManager.saveInfo(name, surname, email);  // Save info for future use
                             Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
                             replaceFragment(new HomeFragment());
                         } catch (JSONException e) {

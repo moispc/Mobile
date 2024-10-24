@@ -6,6 +6,33 @@
     android:orientation="vertical"
     android:padding="16dp"> <!-- Fondo naranja -->
 
+    <!-- Contenedor para la flecha y el título -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Flecha para regresar -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"
+            android:padding="8dp" />
+
+        <!-- Texto de Editar perfil -->
+        <TextView
+            android:id="@+id/title_edit_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar perfil"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:paddingStart="8dp" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="100dp"

@@ -52,7 +52,7 @@
         >
 
         <TextView
-            android:id="@+id/tvTitle1"
+            android:id="@+id/textViewNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dirección de entrega"
@@ -65,7 +65,7 @@
             />
 
         <TextView
-            android:id="@+id/tvSubTitle1"
+            android:id="@+id/textViewPrecio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Siempre viva 123"
@@ -73,7 +73,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvTitle1"
+            app:layout_constraintTop_toTopOf="@+id/textViewNombre"
             android:layout_marginTop="26dp"
             />
 
@@ -84,7 +84,7 @@
             android:background="#fefdf9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvTitle1"
+            app:layout_constraintStart_toEndOf="@+id/textViewNombre"
             app:layout_constraintEnd_toEndOf="parent"
 
             >
