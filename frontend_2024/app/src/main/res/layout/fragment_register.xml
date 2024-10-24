@@ -6,10 +6,9 @@
     android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1a1a1a"
-    >
+    android:background="#1a1a1a">
 
-    <!-- Username Field -->
+    <!-- Title -->
     <TextView
         android:id="@+id/tvTitle2"
         android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"/>
 
-
     <EditText
         android:id="@+id/etNombre"
         android:layout_width="0dp"
@@ -34,15 +32,10 @@
         android:inputType="textPersonName"
         android:padding="16dp"
         android:textColor="@color/black"
-        android:textColorHighlight="@color/black"
-        android:textColorHint="#000000"
-        android:textColorLink="#000000"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="30dp"
-        />
-
+        android:layout_marginTop="30dp"/>
 
     <EditText
         android:id="@+id/etApellido"
@@ -53,16 +46,10 @@
         android:inputType="textPersonName"
         android:padding="16dp"
         android:textColor="#000000"
-        android:textColorHighlight="#000000"
-        android:textColorHint="#000000"
-        android:textColorLink="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNombre"
-        android:layout_marginTop="5dp"
- />
-
-    <!-- Password Field -->
+        android:layout_marginTop="5dp"/>
 
     <EditText
         android:id="@+id/etCorreo"
@@ -73,14 +60,10 @@
         android:inputType="textEmailAddress"
         android:padding="16dp"
         android:textColor="#000000"
-        android:textColorHighlight="#000000"
-        android:textColorHint="#000000"
-        android:textColorLink="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etApellido"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_marginTop="5dp"/>
 
     <EditText
         android:id="@+id/etTelefono"
@@ -88,19 +71,13 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border"
         android:hint="Número Telefónico"
-        android:inputType="textPersonName"
+        android:inputType="phone"
         android:padding="16dp"
         android:textColor="#000000"
-        android:textColorHighlight="#000000"
-        android:textColorHint="#000000"
-        android:textColorLink="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCorreo"
-        android:layout_marginTop="5dp"
-        />
-
-
+        android:layout_marginTop="5dp"/>
 
     <EditText
         android:id="@+id/etPassword"
@@ -111,14 +88,10 @@
         android:inputType="textPassword"
         android:padding="16dp"
         android:textColor="#000000"
-        android:textColorHighlight="#000000"
-        android:textColorHint="#000000"
-        android:textColorLink="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTelefono"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_marginTop="5dp"/>
 
     <EditText
         android:id="@+id/etPassword2"
@@ -129,14 +102,10 @@
         android:inputType="textPassword"
         android:padding="16dp"
         android:textColor="#000000"
-        android:textColorHighlight="#000000"
-        android:textColorHint="#000000"
-        android:textColorLink="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_marginTop="5dp"/>
 
     <Button
         android:id="@+id/btnRegister"
@@ -152,6 +121,5 @@
         android:textColor="#1a1a1a"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/etPassword2" />
-
+        app:layout_constraintTop_toBottomOf="@id/etPassword2"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

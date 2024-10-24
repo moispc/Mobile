@@ -61,7 +61,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private boolean validateInputs() {
-        // Controlar que no haya imputs vacios
+        // Controlar que no haya imputs vacíos
         if (etNombre.getText().toString().isEmpty() ||
                 etApellido.getText().toString().isEmpty() ||
                 etCorreo.getText().toString().isEmpty() ||
@@ -72,13 +72,50 @@ public class RegisterFragment extends Fragment {
             return false;
         }
 
+        // Validar nombre y apellido
+        if (etNombre.getText().toString().length() < 3 || etApellido.getText().toString().length() < 3) {
+            Toast.makeText(getActivity(), "El nombre y el apellido deben tener al menos 3 letras", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Validar correo electrónico
+        if (!isValidEmail(etCorreo.getText().toString())) {
+            Toast.makeText(getActivity(), "Por favor, ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Validar número de teléfono
+        String telefono = etTelefono.getText().toString();
+        if (telefono.length() < 7 || !isNumeric(telefono)) {
+            Toast.makeText(getActivity(), "El número de teléfono debe tener al menos 7 dígitos y no debe contener letras", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         // Controlar que las contraseñas coincidan
         if (!etPassword.getText().toString().equals(etPassword2.getText().toString())) {
             Toast.makeText(getActivity(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        // Validar contraseña
+        if (!isValidPassword(etPassword.getText().toString())) {
+            Toast.makeText(getActivity(), "La contraseña debe tener al menos 4 caracteres, una mayúscula y un número", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    private boolean isNumeric(String str) {
+        return str.matches("\\d+");
+    }
+
+    private boolean isValidEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 4 && password.matches(".*[A-Z].*") && password.matches(".*[0-9].*");
     }
 
     private void registerUser() {
@@ -90,7 +127,7 @@ public class RegisterFragment extends Fragment {
             requestBody.put("email", etCorreo.getText().toString());
             requestBody.put("password", etPassword.getText().toString());
             requestBody.put("nombre", etNombre.getText().toString());
-            requestBody.put("apellido", etApellido.getText().toString()); // Using the "Usuario" as apellido
+            requestBody.put("apellido", etApellido.getText().toString());
             requestBody.put("telefono", etTelefono.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -107,7 +144,7 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getActivity(), "Registro exitoso", Toast.LENGTH_SHORT).show();
-                        replaceFragment(new SuccessRegistryFragment());  // Navigate to success fragment
+                        replaceFragment(new SuccessRegistryFragment());
                     }
                 },
                 new Response.ErrorListener() {
@@ -120,7 +157,8 @@ public class RegisterFragment extends Fragment {
                             Log.e("RegisterFragment", "Response body: " + responseBody);
                         }
                         Toast.makeText(getActivity(), "Error en el registro", Toast.LENGTH_SHORT).show();
-                    }}
+                    }
+                }
         );
 
         // Agregar la request a la queue de Volley
