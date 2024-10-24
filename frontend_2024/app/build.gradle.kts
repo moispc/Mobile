@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+
+
 }
 
 android {
@@ -43,11 +45,21 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    //recyclerview
+    implementation(libs.recyclerview)
+
+
+    //para imagenes
+
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
 //    implementation("androidx.fragment:fragment:1.8.3")
     implementation(libs.fragment)
+    implementation(libs.volley)
 
 }
