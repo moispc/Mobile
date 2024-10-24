@@ -16,51 +16,55 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private SessionManager sessionManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Cargar el LoginFragment al inicio
-        mostrarLogin(); // Carga el LoginFragment al iniciar la aplicación
+        // Initialize SessionManager
+        sessionManager = new SessionManager(this);
 
-//        SessionManager sessionManager = new SessionManager(this);
-//        String token = sessionManager.getToken();
-//
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//        if (token == null) {
-//            // Si no hay token, carga el LoginFragment
-//            fragmentTransaction.replace(R.id.fragment_container_view, new LoginFragment());
-//        } else {
-//            // Si hay token, carga el HomeFragment
-//            fragmentTransaction.replace(R.id.fragment_container_view, new HomeFragment());
-//        }
-//
-//        fragmentTransaction.commit();
+        // Cargar el LoginFragment al inicio
+
+        // Check if a token exists to determine the initial fragment
+        if (sessionManager.getToken() != null) {
+            mostrarHome(); // Show HomeFragment if logged in
+        } else {
+            mostrarLogin(); // Show LoginFragment if not logged in
+        }
+
+//        mostrarLogin(); // Carga el LoginFragment al iniciar la aplicación
+
 
         binding.bottomNavigation.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
                     mostrarHome(); // Show HomeFragment
                     return true;
-                } else if (itemId == R.id.profile) {
-                    mostrarPerfil(); // Show ProfileFragment
-                    return true;
-                } else if (itemId == R.id.menu) {
-                    mostrarProductos(); // Show ProductsFragment
-                    return true;
-                } else if (itemId == R.id.carrito) {
-                    mostrarCarrito(); // Show CartFragment
-                    return true;
+                } else if (itemId == R.id.profile || itemId == R.id.menu || itemId == R.id.carrito) {
+                    if (sessionManager.getToken() == null ){
+                        mostrarLogin();
+                        return false;
+                    } else {
+                        if (itemId == R.id.profile){
+                            mostrarPerfil();
+                            return true;
+                        }else if (itemId == R.id.menu ){
+                            mostrarProductos();
+                            return true;
+                        }else if (itemId == R.id.carrito){
+                            mostrarCarrito(); // Show CartFragment
+                            return true;
+                        }
+                    }
                 } else if (itemId == R.id.contact) {
                     mostrarContact(); // Show ContactFragment
                     return true;
