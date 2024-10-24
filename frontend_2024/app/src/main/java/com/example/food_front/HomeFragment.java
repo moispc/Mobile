@@ -21,7 +21,7 @@ import com.example.food_front.utils.SessionManager;
 
 public class HomeFragment extends Fragment {
 
-    private TextView tvNombre;
+    private TextView txtUser;
     private Button button1, button2, button3, button4;
     private ImageView imageView1, imageView2, imageView3, imageView4;
     private ProfileManager profileManager;
@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Inicializar vistas
-        tvNombre = view.findViewById(R.id.txtUser);
+        txtUser = view.findViewById(R.id.txtUser);
         button1 = view.findViewById(R.id.btn1);
         button2 = view.findViewById(R.id.btn);
         button3 = view.findViewById(R.id.btn3);
@@ -75,9 +75,9 @@ public class HomeFragment extends Fragment {
     private void mostrarNombreUsuario() {
         String nombreGuardado = profileManager.getName();
         if (nombreGuardado != null) {
-            tvNombre.setText("Bienvenido " + nombreGuardado);
+            txtUser.setText("Bienvenido " + nombreGuardado);
         } else {
-            tvNombre.setText("Usuario");
+            txtUser.setText("Usuario");
         }
     }
 
