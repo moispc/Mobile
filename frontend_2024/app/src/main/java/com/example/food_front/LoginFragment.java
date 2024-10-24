@@ -83,12 +83,6 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        // Validar contraseña
-        if (!isValidPassword(password)) {
-            Toast.makeText(getContext(), "La contraseña debe tener al menos 4 caracteres, una mayúscula y un número", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         String url = "https://backmobile1.onrender.com/appUSERS/login/";
 
         // Crear el json que se enviará en el body
@@ -111,9 +105,13 @@ public class LoginFragment extends Fragment {
                             String name = response.getString("nombre");
                             String surname = response.getString("apellido");
                             String email = response.getString("email");
-                            sessionManager.saveToken(token);  // Save token for future use
-                            profileManager.saveInfo(name, surname, email);  // Save info for future use
+                            String phone = response.getString("telefono");
+
+                            sessionManager.saveToken(token);  // Guardar el token para futuras solicitudes
+                            profileManager.saveInfo(name, surname, email, phone);  // Save info for future use
+                            saveUserProfile(name, surname, email, phone); // Llamada a la nueva función
                             Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+
                             replaceFragment(new HomeFragment());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -147,9 +145,9 @@ public class LoginFragment extends Fragment {
         return email.matches(emailPattern);
     }
 
-    private boolean isValidPassword(String password) {
-        // Comprobar que la contraseña tenga al menos 4 caracteres, una mayúscula y un número
-        return password.length() >= 4 && password.matches(".*[A-Z].*") && password.matches(".*[0-9].*");
+    public void saveUserProfile(String name, String surname, String email, String phone) {
+        profileManager.saveInfo(name, surname, email, phone); // Guardar los datos del usuario
+        Toast.makeText(getContext(), "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void replaceFragment(Fragment newFragment) {

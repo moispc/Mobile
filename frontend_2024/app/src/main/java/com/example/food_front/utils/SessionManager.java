@@ -28,9 +28,6 @@ public class SessionManager {
         return sharedPreferences.getString(KEY_TOKEN, null);
     }
 
-
-
-
     // Borrar la session
     public void clearSession() {
         editor.clear();

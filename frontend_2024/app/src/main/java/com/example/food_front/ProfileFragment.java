@@ -13,11 +13,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.food_front.utils.ProfileManager;
+import com.example.food_front.utils.SessionManager;
 
 public class ProfileFragment extends Fragment {
 
     private TextView tvNombre, tvEmail;
     private ProfileManager profileManager;
+    private SessionManager sessionManager;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -32,12 +34,16 @@ public class ProfileFragment extends Fragment {
         tvNombre = view.findViewById(R.id.user_name);
         tvEmail = view.findViewById(R.id.user_email);
         profileManager = new ProfileManager(requireContext());
+        sessionManager = new SessionManager(requireContext());
 
         // Llamar al backend para obtener los datos del perfil
         displayUserProfile();
 
         // Encontrar el TextView de "Datos personales"
         TextView personalData = view.findViewById(R.id.personal_data);
+
+        // Encontrar el TextView de "Datos personales"
+        TextView closeSession = view.findViewById(R.id.logout);
 
         // Agregar un onClickListener para navegar a "Editar perfil"
         personalData.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +53,21 @@ public class ProfileFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container_view, new EditProfileFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        // Agregar un onClickListener para navegar a "Cerrar sesión"
+        closeSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Iniciar la transacción para cerrar sesion
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                sessionManager.clearSession();
+                profileManager.clearInfo();
+                fragmentTransaction.replace(R.id.fragment_container_view, new HomeFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -65,5 +86,4 @@ public class ProfileFragment extends Fragment {
         tvNombre.setText(name + " " + surname);  // Mostrar nombre completo
         tvEmail.setText(email);
     }
-
 }
