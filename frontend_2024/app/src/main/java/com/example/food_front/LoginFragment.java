@@ -68,7 +68,6 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-
     private void performLogin() {
         String email = etCorreo.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -101,8 +100,11 @@ public class LoginFragment extends Fragment {
                             String name = response.getString("nombre");
                             String surname = response.getString("apellido");
                             String email = response.getString("email");
-                            sessionManager.saveToken(token);  // Save token for future use
-                            profileManager.saveInfo(name, surname, email);  // Save info for future use
+                            String phone = response.getString("telefono");
+
+                            sessionManager.saveToken(token);  // Guardar el token para futuras solicitudes
+                            saveUserProfile(name, surname, email, phone); // Llamada a la nueva función
+
                             Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
                             replaceFragment(new HomeFragment());
                         } catch (JSONException e) {
@@ -120,6 +122,11 @@ public class LoginFragment extends Fragment {
         // Agregar la request a la queue de Volley
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(request);
+    }
+
+    public void saveUserProfile(String name, String surname, String email, String phone) {
+        profileManager.saveInfo(name, surname, email, phone); // Guardar los datos del usuario
+        Toast.makeText(getContext(), "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void replaceFragment(Fragment newFragment) {
