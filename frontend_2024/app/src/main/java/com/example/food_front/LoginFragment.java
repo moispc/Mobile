@@ -37,7 +37,6 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // Inicializar las vistas
@@ -68,14 +67,19 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-
     private void performLogin() {
         String email = etCorreo.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Controlar que no haya imputs vacios
+        // Validar campos vacíos
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Validar correo electrónico
+        if (!isValidEmail(email)) {
+            Toast.makeText(getContext(), "Por favor, ingresa un correo electrónico válido", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -101,25 +105,49 @@ public class LoginFragment extends Fragment {
                             String name = response.getString("nombre");
                             String surname = response.getString("apellido");
                             String email = response.getString("email");
-                            sessionManager.saveToken(token);  // Save token for future use
-                            profileManager.saveInfo(name, surname, email);  // Save info for future use
-                            Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                            String phone = response.getString("telefono");
+
+                            sessionManager.saveToken(token);  // Guardar el token para futuras solicitudes
+                            profileManager.saveInfo(name, surname, email, phone);  // Save info for future use
+                            saveUserProfile(name, surname, email, phone); // Llamada a la nueva función
+                            Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+
                             replaceFragment(new HomeFragment());
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "Invalid response from server", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Respuesta inválida del servidor", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                // Manejo de errores dependiendo del estado del servidor
+                String errorMessage = error.networkResponse != null && error.networkResponse.data != null
+                        ? new String(error.networkResponse.data)
+                        : "Error en el inicio de sesión";
+
+                if (errorMessage.contains("usuario no encontrado") || errorMessage.contains("no se reconoció")) {
+                    Toast.makeText(getContext(), "Usuario no se reconoció o no existe. Por favor, regístrate.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         // Agregar la request a la queue de Volley
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(request);
+    }
+
+    private boolean isValidEmail(String email) {
+        // Regex para validar el correo electrónico
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        return email.matches(emailPattern);
+    }
+
+    public void saveUserProfile(String name, String surname, String email, String phone) {
+        profileManager.saveInfo(name, surname, email, phone); // Guardar los datos del usuario
+        Toast.makeText(getContext(), "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void replaceFragment(Fragment newFragment) {
@@ -130,3 +158,4 @@ public class LoginFragment extends Fragment {
         fragmentTransaction.commit();
     }
 }
+

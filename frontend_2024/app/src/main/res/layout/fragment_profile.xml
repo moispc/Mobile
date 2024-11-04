@@ -15,15 +15,6 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="10dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/perfil" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,4 +108,14 @@
             android:textColor="@android:color/black"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_delete_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/black"
+        android:text="Eliminar cuenta"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 </LinearLayout>

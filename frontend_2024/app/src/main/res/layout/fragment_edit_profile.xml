@@ -33,18 +33,11 @@
             android:paddingStart="8dp" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@mipmap/perfil" />
-
     <EditText
         android:id="@+id/edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="150dp"
         android:hint="Nombre"
         android:text="Pablo" />
 
