@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#1a1a1a">
 
-    <!-- Title -->
+    <!-- Título del formulario -->
     <TextView
         android:id="@+id/tvTitle2"
         android:layout_width="wrap_content"
@@ -23,6 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"/>
 
+    <!-- Campo Nombre -->
     <EditText
         android:id="@+id/etNombre"
         android:layout_width="0dp"
@@ -37,6 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="30dp"/>
 
+    <!-- Campo Apellido -->
     <EditText
         android:id="@+id/etApellido"
         android:layout_width="0dp"
@@ -46,11 +48,15 @@
         android:inputType="textPersonName"
         android:padding="16dp"
         android:textColor="#000000"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/etNombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNombre"
         android:layout_marginTop="5dp"/>
 
+    <!-- Campo Correo Electrónico -->
     <EditText
         android:id="@+id/etCorreo"
         android:layout_width="0dp"
@@ -60,11 +66,15 @@
         android:inputType="textEmailAddress"
         android:padding="16dp"
         android:textColor="#000000"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/etApellido"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etApellido"
         android:layout_marginTop="5dp"/>
 
+    <!-- Campo Teléfono -->
     <EditText
         android:id="@+id/etTelefono"
         android:layout_width="0dp"
@@ -74,11 +84,15 @@
         android:inputType="phone"
         android:padding="16dp"
         android:textColor="#000000"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/etCorreo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCorreo"
         android:layout_marginTop="5dp"/>
 
+    <!-- Campo Contraseña -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="0dp"
@@ -88,30 +102,51 @@
         android:inputType="textPassword"
         android:padding="16dp"
         android:textColor="#000000"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/etTelefono"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etTelefono"
         android:layout_marginTop="5dp"/>
 
+    <!-- Campo Confirmación de Contraseña -->
     <EditText
         android:id="@+id/etPassword2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
-        android:hint="@string/verifique_contrase_a"
+        android:hint="Verifique Contraseña"
         android:inputType="textPassword"
         android:padding="16dp"
         android:textColor="#000000"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
         android:layout_marginTop="5dp"/>
 
+    <!-- Mensaje de Error (se muestra en caso de error en validación) -->
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Botón de Registro -->
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/registrarse"
+        android:text="Registrarse"
         android:textAllCaps="false"
         android:padding="12dp"
         android:backgroundTint="#ffbe00"
