@@ -39,3 +39,16 @@ class AuthTokenSerializer(serializers.Serializer):
         
         data['user'] = user
         return data
+
+class TokenResponseSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    user_id = serializers.IntegerField()
+    refresh = serializers.CharField()
+    access = serializers.CharField()
+    nombre = serializers.CharField()
+    apellido = serializers.CharField()
+    telefono = serializers.CharField()
+    admin = serializers.BooleanField()
+
+class MessageResponseSerializer(serializers.Serializer):
+    detalle = serializers.CharField()
