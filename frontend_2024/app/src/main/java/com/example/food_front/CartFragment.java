@@ -136,6 +136,17 @@ public class CartFragment extends Fragment {
                                     Carrito carrito = new Carrito(id_carrito, nombre_producto, cantidad, precio, imagenUrl);
                                     carritoList.add(carrito);  // Añadir a la lista
                                 }
+
+
+                                if (carritoList.isEmpty()) {
+                                    tvTotal.setVisibility(View.GONE);
+                                    btnConfirmar.setEnabled(false);
+                                    btnConfirmar.setVisibility(View.GONE);
+                                    rediretToEmptyCart();
+                                } else {
+                                    tvTotal.setVisibility(View.VISIBLE);
+                                }
+
                                 tvTotal.setText("Total: $" + precioTotal);
 
 
@@ -281,4 +292,13 @@ public class CartFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         }
+
+
+    private void rediretToEmptyCart() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, new EmptyCartFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }
