@@ -1,17 +1,18 @@
 package com.example.food_front;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,129 +23,160 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.food_front.utils.ProfileManager;
+import com.example.food_front.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginFragment extends Fragment {
 
-
     private EditText etCorreo, etPassword;
-    private TextView tvErrorEmail, tvError;
-    private ImageView ivTogglePassword;
-    private Button btnLogin;
-    private TextView tvRegister;
+    private SessionManager sessionManager;
+    private ProfileManager profileManager;
+    private int loginAttempts = 0;  // Contador de intentos fallidos
+    private boolean isBlocked = false;  // Indicador de bloqueo
+    private TextView tvEmailError, tvPasswordError;  // Para mostrar los errores
 
-    public LoginFragment() {
-
-    }
-
+    @Nullable
     @Override
-public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_login, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // Inicializar las vistas
         etCorreo = view.findViewById(R.id.etCorreo);
         etPassword = view.findViewById(R.id.etPassword);
-        tvErrorEmail = view.findViewById(R.id.tvErrorEmail);
-        tvError = view.findViewById(R.id.tvError);
-        ivTogglePassword = view.findViewById(R.id.ivTogglePassword);
-        btnLogin = view.findViewById(R.id.btnLogin);
-        tvRegister = view.findViewById(R.id.tvRegister);
+        Button btnLogin = view.findViewById(R.id.btnLogin);
+        TextView tvRegister = view.findViewById(R.id.tvRegister);
+        tvEmailError = view.findViewById(R.id.tvEmailError);
+        tvPasswordError = view.findViewById(R.id.tvPasswordError);
 
-        btnLogin.setOnClickListener(v -> {
-            if (validateInputs()) {
+        sessionManager = new SessionManager(requireContext());
+        profileManager = new ProfileManager(requireContext());
+
+        // Agregar el click listener al boton de login
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isBlocked) {
+                    Toast.makeText(getContext(), "Has excedido el número de intentos. Intenta nuevamente en 10 segundos.", Toast.LENGTH_LONG).show();
+                    return;  // Bloqueo temporal
+                }
                 performLogin();
             }
         });
 
-        tvRegister.setOnClickListener(v -> replaceFragment(new RegisterFragment()));
-        ivTogglePassword.setOnClickListener(v -> togglePasswordVisibility());
+        // Agregar el click listener al texto de registro
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new RegisterFragment());
+            }
+        });
 
         return view;
     }
 
-    private boolean validateInputs() {
-
-        tvErrorEmail.setVisibility(View.GONE);
-        tvError.setVisibility(View.GONE);
-
+    private void performLogin() {
         String email = etCorreo.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
+        // Limpiar mensajes de error anteriores
+        tvEmailError.setVisibility(View.GONE);
+        tvPasswordError.setVisibility(View.GONE);
 
-        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tvErrorEmail.setText("Correo no registrado");
-            tvErrorEmail.setVisibility(View.VISIBLE);
-            return false;
-        }
-
-
-        if (TextUtils.isEmpty(password)) {
-            tvError.setText("Contraseña incorrecta");
-            tvError.setVisibility(View.VISIBLE);
-            return false;
-        }
-
-        return true;
-    }
-
-    private void performLogin() {
-        String url = "https://backmobile1.onrender.com/appUSERS/login/";
-
-
-        JSONObject requestBody = new JSONObject();
-        try {
-            requestBody.put("email", etCorreo.getText().toString());
-            requestBody.put("password", etPassword.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Error al crear el cuerpo de la solicitud", Toast.LENGTH_SHORT).show();
+        // Validar campos vacíos
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Validar correo electrónico
+        if (!isValidEmail(email)) {
+            tvEmailError.setVisibility(View.VISIBLE);  // Mostrar error de correo
+            return;
+        }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                requestBody,
+        String url = "https://backmobile1.onrender.com/appUSERS/login/";
+
+        // Crear el json que se enviará en el body
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email);
+            requestBody.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Crear el request de volley
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getActivity(), "Ingreso exitoso", Toast.LENGTH_SHORT).show();
+                        try {
+                            String token = response.getString("access");
+                            String name = response.getString("nombre");
+                            String surname = response.getString("apellido");
+                            String email = response.getString("email");
+                            String phone = response.getString("telefono");
 
-                        replaceFragment(new HomeFragment());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                            sessionManager.saveToken(token);  // Guardar el token para futuras solicitudes
+                            profileManager.saveInfo(name, surname, email, phone);  // Save info for future use
+                            saveUserProfile(name, surname, email, phone); // Llamada a la nueva función
+                            Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
 
-                        if (error.networkResponse != null && error.networkResponse.statusCode == 401) {
-                            tvError.setText("Credenciales inválidas");
-                            tvError.setVisibility(View.VISIBLE);
-                        } else {
-                            tvError.setText("Error en el inicio de sesión. Intente nuevamente.");
-                            tvError.setVisibility(View.VISIBLE);
+                            loginAttempts = 0;  // Resetear el contador de intentos al hacer login exitoso
+                            replaceFragment(new HomeFragment());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Respuesta inválida del servidor", Toast.LENGTH_SHORT).show();
                         }
                     }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Incrementar el contador de intentos fallidos
+                loginAttempts++;
+
+                // Limpiar mensajes de error anteriores
+                tvEmailError.setVisibility(View.GONE);
+                tvPasswordError.setVisibility(View.GONE);
+
+                // Manejo de errores dependiendo del estado del servidor
+                String errorMessage = error.networkResponse != null && error.networkResponse.data != null
+                        ? new String(error.networkResponse.data)
+                        : "Error en el inicio de sesión";
+
+                if (errorMessage.contains("usuario no encontrado") || errorMessage.contains("no se reconoció")) {
+                    tvEmailError.setVisibility(View.VISIBLE);  // Mostrar error de correo
+                } else if (errorMessage.contains("contraseña incorrecta")) {
+                    tvPasswordError.setVisibility(View.VISIBLE);  // Mostrar error de contraseña
+                } else {
+                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
-        );
 
+                // Si el contador alcanza 7 intentos fallidos, bloquear el acceso durante 10 segundos
+                if (loginAttempts >= 7) {
+                    isBlocked = true;
+                    Toast.makeText(getContext(), "Número máximo de intentos alcanzado. Intenta nuevamente en 10 segundos.", Toast.LENGTH_LONG).show();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(jsonObjectRequest);
-    }
+                    // Reiniciar el bloqueo después de 10 segundos
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isBlocked = false;  // Desbloquear el login después de 10 segundos
+                            loginAttempts = 0;  // Resetear el contador de intentos
+                            Toast.makeText(getContext(), "Puedes intentar iniciar sesión nuevamente.", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 10000);  // 10 segundos de espera
+                }
+            }
+        });
 
-    private void togglePasswordVisibility() {
-        if (etPassword.getInputType() == 129) { // Contraseña oculta
-            etPassword.setInputType(145); // Mostrar contraseña
-            ivTogglePassword.setImageResource(android.R.drawable.ic_menu_gallery); // Ojo abierto
-        } else {
-            etPassword.setInputType(129); // Ocultar contraseña
-            ivTogglePassword.setImageResource(android.R.drawable.ic_menu_view); // Ojo cerrado
-        }
-        etPassword.setSelection(etPassword.getText().length()); // Mantener el cursor al final
+        // Agregar la request a la queue de Volley
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(request);
     }
 
     private boolean isValidEmail(String email) {
