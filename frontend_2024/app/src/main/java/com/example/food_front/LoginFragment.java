@@ -2,6 +2,7 @@ package com.example.food_front;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,9 @@ public class LoginFragment extends Fragment {
     private EditText etCorreo, etPassword;
     private SessionManager sessionManager;
     private ProfileManager profileManager;
+    private int loginAttempts = 0;  // Contador de intentos fallidos
+    private boolean isBlocked = false;  // Indicador de bloqueo
+    private TextView tvEmailError, tvPasswordError;  // Para mostrar los errores
 
     @Nullable
     @Override
@@ -44,6 +48,8 @@ public class LoginFragment extends Fragment {
         etPassword = view.findViewById(R.id.etPassword);
         Button btnLogin = view.findViewById(R.id.btnLogin);
         TextView tvRegister = view.findViewById(R.id.tvRegister);
+        tvEmailError = view.findViewById(R.id.tvEmailError);
+        tvPasswordError = view.findViewById(R.id.tvPasswordError);
 
         sessionManager = new SessionManager(requireContext());
         profileManager = new ProfileManager(requireContext());
@@ -52,6 +58,10 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isBlocked) {
+                    Toast.makeText(getContext(), "Has excedido el número de intentos. Intenta nuevamente en 10 segundos.", Toast.LENGTH_LONG).show();
+                    return;  // Bloqueo temporal
+                }
                 performLogin();
             }
         });
@@ -71,6 +81,10 @@ public class LoginFragment extends Fragment {
         String email = etCorreo.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
+        // Limpiar mensajes de error anteriores
+        tvEmailError.setVisibility(View.GONE);
+        tvPasswordError.setVisibility(View.GONE);
+
         // Validar campos vacíos
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
@@ -79,7 +93,7 @@ public class LoginFragment extends Fragment {
 
         // Validar correo electrónico
         if (!isValidEmail(email)) {
-            Toast.makeText(getContext(), "Por favor, ingresa un correo electrónico válido", Toast.LENGTH_SHORT).show();
+            tvEmailError.setVisibility(View.VISIBLE);  // Mostrar error de correo
             return;
         }
 
@@ -112,6 +126,7 @@ public class LoginFragment extends Fragment {
                             saveUserProfile(name, surname, email, phone); // Llamada a la nueva función
                             Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
 
+                            loginAttempts = 0;  // Resetear el contador de intentos al hacer login exitoso
                             replaceFragment(new HomeFragment());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -121,15 +136,40 @@ public class LoginFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Incrementar el contador de intentos fallidos
+                loginAttempts++;
+
+                // Limpiar mensajes de error anteriores
+                tvEmailError.setVisibility(View.GONE);
+                tvPasswordError.setVisibility(View.GONE);
+
                 // Manejo de errores dependiendo del estado del servidor
                 String errorMessage = error.networkResponse != null && error.networkResponse.data != null
                         ? new String(error.networkResponse.data)
                         : "Error en el inicio de sesión";
 
                 if (errorMessage.contains("usuario no encontrado") || errorMessage.contains("no se reconoció")) {
-                    Toast.makeText(getContext(), "Usuario no se reconoció o no existe. Por favor, regístrate.", Toast.LENGTH_LONG).show();
+                    tvEmailError.setVisibility(View.VISIBLE);  // Mostrar error de correo
+                } else if (errorMessage.contains("contraseña incorrecta")) {
+                    tvPasswordError.setVisibility(View.VISIBLE);  // Mostrar error de contraseña
                 } else {
                     Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
+
+                // Si el contador alcanza 7 intentos fallidos, bloquear el acceso durante 10 segundos
+                if (loginAttempts >= 7) {
+                    isBlocked = true;
+                    Toast.makeText(getContext(), "Número máximo de intentos alcanzado. Intenta nuevamente en 10 segundos.", Toast.LENGTH_LONG).show();
+
+                    // Reiniciar el bloqueo después de 10 segundos
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isBlocked = false;  // Desbloquear el login después de 10 segundos
+                            loginAttempts = 0;  // Resetear el contador de intentos
+                            Toast.makeText(getContext(), "Puedes intentar iniciar sesión nuevamente.", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 10000);  // 10 segundos de espera
                 }
             }
         });

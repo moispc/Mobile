@@ -1,12 +1,14 @@
 package com.example.food_front;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -27,9 +29,9 @@ public class RegisterFragment extends Fragment {
 
     private EditText etNombre, etApellido, etCorreo, etTelefono, etPassword, etPassword2;
     private Button btnRegister;
+    private TextView tvError;
 
     public RegisterFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -46,8 +48,8 @@ public class RegisterFragment extends Fragment {
         etPassword = view.findViewById(R.id.etPassword);
         etPassword2 = view.findViewById(R.id.etPassword2);
         btnRegister = view.findViewById(R.id.btnRegister);
+        tvError = view.findViewById(R.id.tvError);
 
-        // Agregar el listener al boton de registro
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,39 +63,36 @@ public class RegisterFragment extends Fragment {
     }
 
     private boolean validateInputs() {
-        // Controlar que no haya imputs vacíos
-        if (etNombre.getText().toString().isEmpty() ||
-                etApellido.getText().toString().isEmpty() ||
-                etCorreo.getText().toString().isEmpty() ||
-                etTelefono.getText().toString().isEmpty() ||
-                etPassword.getText().toString().isEmpty() ||
-                etPassword2.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Por favor complete todos los campos", Toast.LENGTH_SHORT).show();
+        tvError.setVisibility(View.GONE);
+
+        if (etNombre.getText().toString().trim().length() < 3 || etApellido.getText().toString().trim().length() < 3) {
+            tvError.setText("El nombre y apellido deben tener al menos 3 caracteres.");
+            tvError.setVisibility(View.VISIBLE);
             return false;
         }
 
-        // Validar nombre y apellido
-        if (etNombre.getText().toString().length() < 3 || etApellido.getText().toString().length() < 3) {
-            Toast.makeText(getActivity(), "El nombre y el apellido deben tener al menos 3 letras", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(etCorreo.getText()) || !Patterns.EMAIL_ADDRESS.matcher(etCorreo.getText()).matches()) {
+            tvError.setText("Por favor ingrese un correo electrónico válido.");
+            tvError.setVisibility(View.VISIBLE);
             return false;
         }
 
-        // Validar correo electrónico
-        if (!isValidEmail(etCorreo.getText().toString())) {
-            Toast.makeText(getActivity(), "Por favor, ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show();
+        if (etTelefono.getText().toString().trim().length() < 9) {
+            tvError.setText("El número de teléfono debe tener al menos 9 dígitos.");
+            tvError.setVisibility(View.VISIBLE);
             return false;
         }
 
-        // Validar número de teléfono
-        String telefono = etTelefono.getText().toString();
-        if (telefono.length() < 7 || !isNumeric(telefono)) {
-            Toast.makeText(getActivity(), "El número de teléfono debe tener al menos 7 dígitos y no debe contener letras", Toast.LENGTH_SHORT).show();
+        String password = etPassword.getText().toString();
+        if (password.length() < 4 || !password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*")) {
+            tvError.setText("La contraseña debe tener al menos 4 caracteres, una mayúscula y un número.");
+            tvError.setVisibility(View.VISIBLE);
             return false;
         }
 
-        // Controlar que las contraseñas coincidan
-        if (!etPassword.getText().toString().equals(etPassword2.getText().toString())) {
-            Toast.makeText(getActivity(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+        if (!password.equals(etPassword2.getText().toString())) {
+            tvError.setText("Las contraseñas no coinciden.");
+            tvError.setVisibility(View.VISIBLE);
             return false;
         }
 
@@ -121,7 +120,6 @@ public class RegisterFragment extends Fragment {
     private void registerUser() {
         String url = "https://backmobile1.onrender.com/appUSERS/register/";
 
-        // Crear el json que se enviará en el body
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put("email", etCorreo.getText().toString());
@@ -135,7 +133,7 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
-        // Crear el request de volley
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
@@ -144,24 +142,26 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getActivity(), "Registro exitoso", Toast.LENGTH_SHORT).show();
-                        replaceFragment(new SuccessRegistryFragment());
+                        replaceFragment(new LoginFragment());
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("RegisterFragment", "Error: " + error.toString());
-                        if (error.networkResponse != null) {
-                            Log.e("RegisterFragment", "Response code: " + error.networkResponse.statusCode);
-                            String responseBody = new String(error.networkResponse.data);
-                            Log.e("RegisterFragment", "Response body: " + responseBody);
+
+                        if (error.networkResponse != null && error.networkResponse.statusCode == 409) {
+                            tvError.setText("El correo electrónico ya está en uso.");
+                            tvError.setVisibility(View.VISIBLE);
+                        } else {
+
+                            tvError.setText("El mail se encuentra en uso.");
+                            tvError.setVisibility(View.VISIBLE);
                         }
-                        Toast.makeText(getActivity(), "Error en el registro", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
 
-        // Agregar la request a la queue de Volley
+
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         requestQueue.add(jsonObjectRequest);
     }
