@@ -158,4 +158,3 @@ public class LoginFragment extends Fragment {
         fragmentTransaction.commit();
     }
 }
-
