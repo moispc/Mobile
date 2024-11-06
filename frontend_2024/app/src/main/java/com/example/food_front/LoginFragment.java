@@ -126,7 +126,7 @@ public class LoginFragment extends Fragment {
                         ? new String(error.networkResponse.data)
                         : "Error en el inicio de sesión";
 
-                if (errorMessage.contains("usuario no encontrado") || errorMessage.contains("no se reconoció")) {
+                if (errorMessage.contains("non_field_errors")) {
                     Toast.makeText(getContext(), "Usuario no se reconoció o no existe. Por favor, regístrate.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -158,4 +158,3 @@ public class LoginFragment extends Fragment {
         fragmentTransaction.commit();
     }
 }
-

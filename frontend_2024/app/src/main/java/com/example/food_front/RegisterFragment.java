@@ -150,13 +150,15 @@ public class RegisterFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("RegisterFragment", "Error: " + error.toString());
-                        if (error.networkResponse != null) {
-                            Log.e("RegisterFragment", "Response code: " + error.networkResponse.statusCode);
-                            String responseBody = new String(error.networkResponse.data);
-                            Log.e("RegisterFragment", "Response body: " + responseBody);
+                        String errorMessage = error.networkResponse != null && error.networkResponse.data != null
+                                ? new String(error.networkResponse.data)
+                                : "Error en el inicio de sesión";
+
+                        if (errorMessage.contains("Usuario with this email already exists.") ) {
+                            Toast.makeText(getContext(), "Ya existe una cuenta con ese mail.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(getActivity(), "Error en el registro", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
