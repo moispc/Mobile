@@ -3,16 +3,22 @@
 
 <img src="https://github.com/user-attachments/assets/0bf52317-646d-4954-be80-caa421b0206d" alt="ISPC LOGO FLASH 300" width="100"/>
 
-# Moispc - 2024 - Aplicacion mobile de comidas rapidas (FOOD_ISPC)
+# Moispc - 2025 - Plataforma Web y Mobile para Ventas de Comidas Rápidas.
 
-## Descripción de la Aplicación
-La aplicación food_ispc comenzó como una tienda virtual de comida rápida, diseñada para permitir a los usuarios explorar una amplia gama de productos, seleccionarlos y realizar pedidos desde sus dispositivos web. Ahora, estamos en el proceso de llevar esta experiencia a una plataforma móvil, optimizando la aplicación para ofrecer las siguientes funcionalidades en dispositivos móviles:
+## Descripción
 
-* Exploración y búsqueda de productos: Navegar por el menú, visualizar detalles de los productos y aplicar filtros para encontrar opciones rápidamente.
-* Gestión del carrito de compras: Añadir productos al carrito, ajustar cantidades y eliminar artículos antes de completar la compra.
-* Finalización de pedidos: Iniciar el proceso de compra, ingresar direcciones de entrega y confirmar pagos de manera ágil y segura.
-* Notificaciones en tiempo real: Recibir actualizaciones sobre el estado de los pedidos, desde el procesamiento hasta la entrega.
-* Acceso a la cuenta: Iniciar sesión, registrarse y recuperar contraseñas, garantizando la seguridad y actualización del perfil del usuario.
+**Food_ISPC** es una solución digital desarrollada como parte de un proyecto integrador para un emprendimiento de comidas rápidas. La plataforma incluye una versión web y una app móvil, pensadas para que los usuarios puedan explorar el menú, hacer pedidos y gestionar sus compras de forma simple y rápida.
+
+El objetivo fue diseñar una experiencia moderna, práctica y accesible, tanto para el cliente como para el negocio. Entre sus funcionalidades principales se encuentran:
+
+- **Exploración del menú:** navegación por categorías como lomos, pizzas, empanadas y hamburguesas, con filtros y detalles por producto.
+- **Carrito de compras:** agregar, editar o quitar productos antes de finalizar la compra.
+- **Gestión de pedidos:** ingreso de datos, elección del método de pago y confirmación del pedido.
+- **Notificaciones:** seguimiento en tiempo real del estado del pedido.
+- **Acceso de usuarios:** registro, login y gestión del perfil.
+
+Este desarrollo forma parte del Proyecto Final de la carrera, integrando aspectos técnicos, diseño UX/UI y enfoque emprendedor.
+
 
 <img src="https://github.com/user-attachments/assets/51a8f7ad-f85c-4c18-ae37-a978410f24bc" alt="ISPC LOGO FOOD" width="100"/>
 
@@ -25,25 +31,13 @@ Toda la documentacion se encuentra en nuestra Wiki: [WIKI](https://shre.ink/Wiki
 
 🚀 Link al prototipo de Figma: <a href="https://www.figma.com/proto/WrbWkPSvLvUgsr9VDRCSAf/proyecto-ISPC?page-id=0%3A1&node-id=467-564&node-type=frame&viewport=773%2C-946%2C0.24&t=VYV2FknRzmrYrS8B-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=445%3A1316" target="_blank">Link Prototipo</a>
 
-## El equipo
 
+## El equipo
 
 | Nombre                      | GitHub                               | LinkedIn                                          |
 |-----------------------------|--------------------------------------|---------------------------------------------------|
-| Diego Guzmán                | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/cerveux-learning) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/diego-guzm%C3%A1n-cerveux/) |
-| Veronica Ludemann           | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/veroludemann) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/veronica-ludemann/) |
-| Gisele Lavisse              | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/gigilavisse) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/gisele-lavisse-934540246/) |
-| Carlos Alberto Nicolas Luna | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/NicolasLuna12) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/nicolas-luna-632612106/) |
-| Lucas Ariel Gelpi Fedorczuk | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/lucasGelpi) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/lucas-gelpi/) |
-| Cristian Ariel López        | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/Kronomio) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/cristianlopez-ok/) |
-| Carolina Ximena Valles      | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/CarolinaV22) |                                                   |
-| Juan Jose Ledesma           | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/acantoscurria) |                                                   |
-| Andrea Paola Testa          | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/PaoTes) |                                                   |
-| Guadalupe Ailen Padin Rojas | [![GitHub](https://img.icons8.com/ios-filled/50/000000/github.png)](https://github.com/GPRNomade) | [![LinkedIn](https://img.icons8.com/ios-filled/50/000000/linkedin.png)](https://www.linkedin.com/in/guadalupepadinrojas/) |
-
-
-
-
-## Requerimientos No funcionales
-* Versión de Android 5 (API 21) 
-* Para correr la aplicación se usara una máquina virtual o dispositivo móvil.
+| Diego Guzmán                | [<img src="https://img.icons8.com/ios-filled/50/000000/github.png" width="20"/>](https://github.com/cerveux-learning) | [<img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" width="20"/>](https://www.linkedin.com/in/diego-guzm%C3%A1n-cerveux/) |
+| Verónica Ludemann           | [<img src="https://img.icons8.com/ios-filled/50/000000/github.png" width="20"/>](https://github.com/veroludemann) | [<img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" width="20"/>](https://www.linkedin.com/in/veronica-ludemann/) |
+| Carlos Alberto Nicolas Luna | [<img src="https://img.icons8.com/ios-filled/50/000000/github.png" width="20"/>](https://github.com/NicolasLuna12) | [<img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" width="20"/>](https://www.linkedin.com/in/nicolas-luna-632612106/) |
+| Lucas Ariel Gelpi Fedorczuk | [<img src="https://img.icons8.com/ios-filled/50/000000/github.png" width="20"/>](https://github.com/lucasGelpi) | [<img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" width="20"/>](https://www.linkedin.com/in/lucas-gelpi/) |
+| Andrea Paola Testa          | [<img src="https://img.icons8.com/ios-filled/50/000000/github.png" width="20"/>](https://github.com/PaoTes) |                                                   |
